@@ -54,7 +54,7 @@ type client struct {
 }
 
 const serviceBusURL = "https://%s.servicebus.windows.net:443/"
-const apiVersion = "2016-07"
+const apiVersion = "2017-04-01"
 
 //New creates a new client from the given parameters. Their meaning can be found in the MSDN docs at:
 //  https://docs.microsoft.com/en-us/rest/api/servicebus/Introduction
@@ -91,7 +91,6 @@ func (c *client) requestWithBody(urlString string, method string, body []byte) (
 		return nil, err
 	}
 	q := url.Query()
-	q.Set("api-version", apiVersion)
 	url.RawQuery = q.Encode()
 
 	req, err := http.NewRequest(method, url.String(), bytes.NewBuffer(body)) // TODO: handle existing query params
@@ -139,6 +138,8 @@ func (c *client) Send(path string, item *Message) error {
 	if err != nil {
 		return err
 	}
+
+	req.Header.Add("Content-Type", "application/vnd.microsoft.servicebus.yml")
 
 	resp, err := c.client.Do(req)
 
