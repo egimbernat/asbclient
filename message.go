@@ -18,7 +18,7 @@ type Message struct {
 	SequenceNumber         int
 	State                  string
 	TimeToLive             int
-
+  Label                  string
 	Location string
 
 	Body []byte
